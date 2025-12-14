@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cast Your Vote - DemocraTech</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #003366;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logout-btn {
+            background-color: #FFB200;
+            color: #003366;
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav {
+            background-color: #f8f9fa;
+            padding: 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .nav ul {
+            list-style: none;
+            display: flex;
+            gap: 0;
+        }
+
+        .nav a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: #003366;
+            text-decoration: none;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .nav a:hover {
+            background-color: #e9ecef;
+            border-bottom-color: #FFB200;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .election-info-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .election-header {
+            background: linear-gradient(135deg, #003366 0%, #004080 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+        }
+
+        .election-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .election-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-size: 0.875rem;
+            color: #6c757d;
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: #003366;
+        }
+
+        .candidates-section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 2rem;
+        }
+
+        .candidates-section h3 {
+            color: #003366;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .candidates-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .candidate-card {
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .candidate-card:hover {
+            border-color: #003366;
+            background-color: #f8fafc;
+        }
+
+        .candidate-card.selected {
+            border-color: #28a745;
+            background-color: #f8fff9;
+        }
+
+        .candidate-info {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .candidate-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #003366;
+            flex-shrink: 0;
+        }
+
+        .candidate-details {
+            flex: 1;
+        }
+
+        .candidate-name {
+            font-weight: 600;
+            color: #003366;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .candidate-id {
+            color: #6c757d;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .candidate-manifesto {
+            color: #495057;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .manifesto-preview {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .read-more {
+            color: #003366;
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .read-more:hover {
+            text-decoration: underline;
+        }
+
+        .radio-select {
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .radio-select input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .voting-instructions {
+            background-color: #e7f3ff;
+            border-left: 4px solid #003366;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+
+        .voting-instructions h4 {
+            color: #003366;
+            margin-bottom: 0.5rem;
+        }
+
+        .voting-instructions ul {
+            padding-left: 1.5rem;
+            color: #495057;
+        }
+
+        .voting-instructions li {
+            margin-bottom: 0.25rem;
+        }
+
+        .vote-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: all 0.3s;
+            flex: 1;
+        }
+
+        .btn-primary {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #218838;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .no-candidates {
+            text-align: center;
+            padding: 3rem;
+            color: #6c757d;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal h3 {
+            color: #003366;
+            margin-bottom: 1rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .modal-btn {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .modal-btn.confirm {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .modal-btn.cancel {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .candidate-info {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .radio-select {
+                position: static;
+                transform: none;
+                margin-top: 1rem;
+            }
+            
+            .vote-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DemocraTech - Cast Your Vote</h1>
+        <div class="user-info">
+            <span>Student: [Student Name]</span>
+            <a href="index.html" class="logout-btn">Logout</a>
+        </div>
+    </div>
+
+    <nav class="nav">
+        <ul>
+            <li><a href="student-dashboard.html">Dashboard</a></li>
+            <li><a href="view-elections.html">Elections</a></li>
+            <li><a href="voting-page.html" class="active">Vote</a></li>
+            <li><a href="vote-history.html">Vote History</a></li>
+            <li><a href="election-results-student.html">Election Result</a></li>
+            <li><a href="apply-candidate.html">Apply As Candidates</a></li>
+            <li><a href="profile.html">Profile</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="election-info-card">
+            <div class="election-header">
+                <h2>Student Union Presidential Election 2024</h2>
+                <p>Cast your vote for the next Student Union President</p>
+            </div>
+            
+            <div class="election-details">
+                <div class="detail-item">
+                    <span class="detail-label">Election Type</span>
+                    <span class="detail-value">Student Union</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Voting Period</span>
+                    <span class="detail-value">Oct 15 - Oct 22, 2024</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Time Remaining</span>
+                    <span class="detail-value" id="timeRemaining">2 days 5 hours</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Your Faculty</span>
+                    <span class="detail-value">[Faculty Name]</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="voting-instructions">
+            <h4>📋 Voting Instructions</h4>
+            <ul>
+                <li>Select ONE candidate by clicking on their card or the radio button</li>
+                <li>You can only vote once in this election</li>
+                <li>Your vote is anonymous and cannot be changed once submitted</li>
+                <li>Review your selection carefully before submitting</li>
+            </ul>
+        </div>
+
+        <div class="candidates-section">
+            <h3>Candidates for President</h3>
+            
+            <div class="candidates-grid" id="candidatesList">
+                <div class="candidate-card" onclick="selectCandidate(1)">
+                    <div class="candidate-info">
+                        <div class="candidate-avatar">JS</div>
+                        <div class="candidate-details">
+                            <div class="candidate-name">John Smith</div>
+                            <div class="candidate-id">Computer Science • 3rd Year</div>
+                            <div class="candidate-manifesto">
+                                <div class="manifesto-preview">
+                                    "I believe in transparent governance and student empowerment. My focus will be on improving campus facilities, mental health support, and creating more internship opportunities..."
+                                </div>
+                                <a href="#" class="read-more" onclick="event.stopPropagation(); viewFullManifesto(1)">Read full manifesto</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="radio-select">
+                        <input type="radio" name="candidate" value="1" id="candidate1">
+                    </div>
+                </div>
+
+                <div class="candidate-card" onclick="selectCandidate(2)">
+                    <div class="candidate-info">
+                        <div class="candidate-avatar">MJ</div>
+                        <div class="candidate-details">
+                            <div class="candidate-name">Maria Johnson</div>
+                            <div class="candidate-id">Business Administration • 4th Year</div>
+                            <div class="candidate-manifesto">
+                                <div class="manifesto-preview">
+                                    "With 2 years of student council experience, I aim to bridge the gap between students and administration. My priorities include sustainable campus initiatives..."
+                                </div>
+                                <a href="#" class="read-more" onclick="event.stopPropagation(); viewFullManifesto(2)">Read full manifesto</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="radio-select">
+                        <input type="radio" name="candidate" value="2" id="candidate2">
+                    </div>
+                </div>
+
+                <div class="candidate-card" onclick="selectCandidate(3)">
+                    <div class="candidate-info">
+                        <div class="candidate-avatar">AW</div>
+                        <div class="candidate-details">
+                            <div class="candidate-name">Alex Williams</div>
+                            <div class="candidate-id">Engineering • 2nd Year</div>
+                            <div class="candidate-manifesto">
+                                <div class="manifesto-preview">
+                                    "As a representative of younger students, I'll fight for better academic support, affordable textbooks, and more social events to build community spirit..."
+                                </div>
+                                <a href="#" class="read-more" onclick="event.stopPropagation(); viewFullManifesto(3)">Read full manifesto</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="radio-select">
+                        <input type="radio" name="candidate" value="3" id="candidate3">
+                    </div>
+                </div>
+            </div>
+
+            <div class="vote-actions">
+                <button class="btn btn-secondary" onclick="window.location.href='view-elections.html'">
+                    ← Back to Elections
+                </button>
+                <button class="btn btn-primary" id="submitVoteBtn" onclick="confirmVote()" disabled>
+                    Submit Vote
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <h3>Confirm Your Vote</h3>
+            <p>You are about to vote for:</p>
+            <p id="selectedCandidateName" style="font-weight: 600; color: #003366; margin: 1rem 0;"></p>
+            <p style="color: #dc3545;">⚠️ Once submitted, your vote cannot be changed.</p>
+            <div class="modal-actions">
+                <button class="modal-btn cancel" onclick="closeModal()">Cancel</button>
+                <button class="modal-btn confirm" onclick="submitVote()">Confirm & Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div style="font-size: 3rem; color: #28a745; margin-bottom: 1rem;">✓</div>
+            <h3>Vote Submitted Successfully!</h3>
+            <p>Your vote has been recorded. Thank you for participating in the democratic process.</p>
+            <div style="margin-top: 1.5rem;">
+                <button class="modal-btn confirm" onclick="goToDashboard()">Return to Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedCandidateId = null;
+        let selectedCandidateName = '';
+        
+        function selectCandidate(candidateId) {
+            document.querySelectorAll('.candidate-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            const candidateCard = document.querySelector(`.candidate-card:nth-child(${candidateId})`);
+            candidateCard.classList.add('selected');
+            
+            document.getElementById(`candidate${candidateId}`).checked = true;
+            
+            selectedCandidateId = candidateId;
+            selectedCandidateName = candidateCard.querySelector('.candidate-name').textContent;
+            
+            document.getElementById('submitVoteBtn').disabled = false;
+        }
+        
+        function confirmVote() {
+            if (!selectedCandidateId) return;
+            
+            document.getElementById('selectedCandidateName').textContent = selectedCandidateName;
+            document.getElementById('confirmationModal').style.display = 'flex';
+        }
+        
+        function closeModal() {
+            document.getElementById('confirmationModal').style.display = 'none';
+        }
+        
+        function submitVote() {
+            console.log(`Vote submitted for candidate ${selectedCandidateId}: ${selectedCandidateName}`);
+            
+            closeModal();
+            
+            setTimeout(() => {
+                document.getElementById('successModal').style.display = 'flex';
+            }, 300);
+        }
+        
+        function goToDashboard() {
+            window.location.href = 'student-dashboard.html';
+        }
+        
+        function viewFullManifesto(candidateId) {
+            const manifestos = {
+                1: "I believe in transparent governance and student empowerment. My focus will be on:\n\n1. Improving campus facilities and study spaces\n2. Enhancing mental health support services\n3. Creating more internship opportunities with local businesses\n4. Implementing a peer tutoring program\n5. Organizing regular town hall meetings for student feedback\n\nI have served as class representative for two years and understand the challenges students face.",
+                2: "With 2 years of student council experience, I aim to bridge the gap between students and administration. My priorities include:\n\n• Sustainable campus initiatives (recycling programs, green energy)\n• Improved dining hall options and meal plans\n• Better career counseling and job placement services\n• Increased funding for student clubs and organizations\n• Enhanced campus safety measures\n\nMy experience in business administration gives me the skills to manage budgets effectively.",
+                3: "As a representative of younger students, I'll fight for:\n\n✓ Better academic support and tutoring services\n✓ Affordable textbooks and learning materials\n✓ More social events to build community spirit\n✓ Improved Wi-Fi coverage across campus\n✓ Support for international students\n✓ Transparency in student government decisions\n\nI believe every student's voice matters, regardless of their year or background."
+            };
+            
+            alert(`Full Manifesto - Candidate ${candidateId}:\n\n${manifestos[candidateId]}`);
+        }
+        
+        document.querySelectorAll('input[name="candidate"]').forEach(radio => {
+            radio.addEventListener('click', function(e) {
+                e.stopPropagation();
+                selectCandidate(parseInt(this.value));
+            });
+        });
+        
+        function updateTimeRemaining() {
+            const timeElement = document.getElementById('timeRemaining');
+            timeElement.textContent = "2 days 4 hours";
+        }
+        
+        setInterval(updateTimeRemaining, 3600000); 
+    </script>
+</body>
+</html>

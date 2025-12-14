@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Elections - DemocraTech</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #003366;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logout-btn {
+            background-color: #FFB200;
+            color: #003366;
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .logout-btn:hover {
+            background-color: #e6a000;
+        }
+
+        .nav {
+            background-color: #f8f9fa;
+            padding: 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .nav ul {
+            list-style: none;
+            display: flex;
+            gap: 0;
+        }
+
+        .nav a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: #003366;
+            text-decoration: none;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            background-color: #e9ecef;
+            border-bottom-color: #FFB200;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h2 {
+            color: #003366;
+            font-size: 1.75rem;
+        }
+
+        .btn-primary {
+            background-color: #003366;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background-color: #002244;
+        }
+
+        .modal {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .modal h3 {
+            color: #003366;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #003366;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .table-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: #f8f9fa;
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            color: #003366;
+            font-weight: 600;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .badge-upcoming {
+            background-color: #cfe2ff;
+            color: #003366;
+        }
+
+        .badge-ongoing {
+            background-color: #d1e7dd;
+            color: #0a3622;
+        }
+
+        .badge-completed {
+            background-color: #f8d7da;
+            color: #58151c;
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-edit {
+            background-color: #FFB200;
+            color: #003366;
+        }
+
+        .btn-edit:hover {
+            background-color: #e6a000;
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #bb2d3b;
+        }
+
+        .btn-view {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .btn-view:hover {
+            background-color: #138496;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+          <h1>DemocraTech - Admin Panel</h1>
+        <div class="user-info">
+            <span>Admin: [Admin Name]</span>
+            <a href="index.html" class="logout-btn">Logout</a>
+        </div>
+    </div>
+
+    <nav class="nav">
+        <ul>
+            <li><a href="admin-dashboard.html">Dashboard</a></li>
+            <li><a href="manage-elections.html" class="active">Elections</a></li>
+            <li><a href="manage-users.html">Users</a></li>
+            <li><a href="manage-candidates.html">Candidates</a></li>
+            <li><a href="election-results.html">Results</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h2>Manage Elections</h2>
+            <button class="btn-primary">+ Create New Election</button>
+        </div>
+
+        <div class="modal">
+            <h3>Create New Election</h3>
+            <form>
+                <div class="form-group">
+                    <label for="title">Election Title *</label>
+                    <input type="text" id="title" name="title" placeholder="e.g., MPP Election 2025" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" placeholder="Enter election details..."></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="start_date">Start Date & Time *</label>
+                        <input type="datetime-local" id="start_date" name="start_date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="end_date">End Date & Time *</label>
+                        <input type="datetime-local" id="end_date" name="end_date" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="status">Status *</label>
+                    <select id="status" name="status" required>
+                        <option value="upcoming">Upcoming</option>
+                        <option value="ongoing">Ongoing</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Save Election</button>
+                    <button type="reset" class="btn-secondary">Clear Form</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Status</th>
+                        <th>Created By</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="7" style="text-align: center; color: #6c757d; padding: 2rem;">No elections found</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

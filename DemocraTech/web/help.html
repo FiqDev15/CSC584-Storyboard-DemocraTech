@@ -1,0 +1,474 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & Support - DemocraTech</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #003366;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logout-btn {
+            background-color: #FFB200;
+            color: #003366;
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .logout-btn:hover {
+            background-color: #e6a000;
+        }
+
+        .nav {
+            background-color: #f8f9fa;
+            padding: 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .nav ul {
+            list-style: none;
+            display: flex;
+            gap: 0;
+        }
+
+        .nav a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: #003366;
+            text-decoration: none;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            background-color: #e9ecef;
+            border-bottom-color: #FFB200;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            color: #003366;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #6c757d;
+        }
+
+        .help-layout {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 2rem;
+        }
+
+        .help-sidebar {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        .help-nav {
+            list-style: none;
+        }
+
+        .help-nav li {
+            margin-bottom: 0.5rem;
+        }
+
+        .help-nav a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #003366;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .help-nav a:hover,
+        .help-nav a.active {
+            background-color: #e9ecef;
+            color: #003366;
+            font-weight: 500;
+        }
+
+        .help-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        .help-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .help-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .help-section h2 {
+            color: #003366;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f8f9fa;
+        }
+
+        .help-section h3 {
+            color: #003366;
+            font-size: 1.2rem;
+            margin: 1.5rem 0 0.75rem;
+        }
+
+        .help-section p {
+            margin-bottom: 1rem;
+            color: #495057;
+        }
+
+        .faq-item {
+            margin-bottom: 1rem;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 1rem;
+            background-color: #f8f9fa;
+            color: #003366;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            padding: 1rem;
+            display: none;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        .contact-form {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+
+        .contact-form h3 {
+            color: #003366;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #003366;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background-color: #003366;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background-color: #002244;
+        }
+
+        .info-box {
+            background-color: #e7f1ff;
+            border-left: 4px solid #003366;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        .warning-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #FFB200;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .quick-link-card {
+            background: white;
+            padding: 1.5rem;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            color: #003366;
+            transition: all 0.3s;
+        }
+
+        .quick-link-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-color: #003366;
+        }
+
+        .quick-link-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .quick-link-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .quick-link-desc {
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DemocraTech - Help & Support</h1>
+        <div class="user-info">
+            <a href="index.html" class="logout-btn">Home</a>
+            <a href="login.html" class="logout-btn">Login</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Help & Support Center</h1>
+            <p>Find answers to frequently asked questions and get support</p>
+        </div>
+
+        <div class="help-layout">
+            <div class="help-sidebar">
+                <ul class="help-nav">
+                    <li><a href="#getting-started" class="active">Getting Started</a></li>
+                    <li><a href="#voting-guide">Voting Guide</a></li>
+                    <li><a href="#contact-support">Contact Support</a></li>
+                </ul>
+            </div>
+
+            <div class="help-content">
+                <div class="help-section" id="getting-started">
+                    <h2>Getting Started</h2>
+                    
+                    <div class="info-box">
+                        Welcome to DemocraTech! This guide will help you navigate the student election system.
+                    </div>
+
+                    <h3>How to Register</h3>
+                    <p>To participate in elections, you need to register with your university credentials:</p>
+                    <ol>
+                        <li>Click on the Register button from the login page</li>
+                        <li>Fill in your personal and academic information</li>
+                        <li>Use your official university email address</li>
+                        <li>Verify your account via email confirmation</li>
+                    </ol>
+
+                    <h3>System Requirements</h3>
+                    <p>For optimal experience, ensure you have:</p>
+                    <ul>
+                        <li>Latest version of Chrome, Firefox, or Edge</li>
+                        <li>Stable internet connection</li>
+                        <li>JavaScript enabled in your browser</li>
+                    </ul>
+                </div>
+
+                <div class="help-section" id="voting-guide">
+                    <h2>Voting Guide</h2>
+                    
+                    <h3>How to Vote</h3>
+                    <p>Follow these steps to cast your vote:</p>
+                    <ol>
+                        <li>Log in to your DemocraTech account</li>
+                        <li>Go to "Elections" page from the navigation menu</li>
+                        <li>Find active elections you're eligible to vote in</li>
+                        <li>Click "Vote Now" button for the election</li>
+                        <li>Review candidate information</li>
+                        <li>Select your preferred candidate</li>
+                        <li>Confirm your selection</li>
+                        <li>Submit your vote</li>
+                    </ol>
+
+                    <div class="warning-box">
+                        <strong>Important:</strong> Once submitted, votes cannot be changed. Please review your selection before submitting.
+                    </div>
+
+                    <h3>Election Schedule</h3>
+                    <p>Elections follow a specific schedule:</p>
+                    <ul>
+                        <li><strong>Campaign Period:</strong> Candidates campaign</li>
+                        <li><strong>Voting Period:</strong> Cast your votes</li>
+                        <li><strong>Results Announcement:</strong> After voting closes</li>
+                    </ul>
+                </div>
+
+                <div class="help-section" id="faq">
+                    <h2>Frequently Asked Questions</h2>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            Can I change my vote after submitting?
+                            <span>▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            No, votes cannot be changed once submitted to ensure election integrity.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            Why can't I see any elections?
+                            <span>▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            Elections may be faculty-specific or not currently active. Check with your faculty administration.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            What if I forget my password?
+                            <span>▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            Use the "Forgot Password" link on the login page to reset your password.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="help-section" id="contact-support">
+                    <h2>Contact Support</h2>
+                    
+                    <div class="contact-form">
+                        <h3>Send us a Message</h3>
+                        <form>
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <select id="subject" class="form-control" required>
+                                    <option value="">Select a topic</option>
+                                    <option value="technical">Technical Issue</option>
+                                    <option value="account">Account Problem</option>
+                                    <option value="voting">Voting Assistance</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" class="form-control" placeholder="Describe your issue in detail..." required></textarea>
+                            </div>
+
+                            <button type="submit" class="submit-btn">Send Message</button>
+                        </form>
+                    </div>
+
+                    <div class="quick-links">
+                        <a href="#" class="quick-link-card">
+                            <div class="quick-link-icon">📧</div>
+                            <div class="quick-link-title">Email Support</div>
+                            <div class="quick-link-desc">support@university.edu</div>
+                        </a>
+
+                        <a href="#" class="quick-link-card">
+                            <div class="quick-link-icon">📞</div>
+                            <div class="quick-link-title">Phone Support</div>
+                            <div class="quick-link-desc">+60 X-XXXX XXXX</div>
+                        </a>
+
+                        <a href="#" class="quick-link-card">
+                            <div class="quick-link-icon">🏢</div>
+                            <div class="quick-link-title">Visit Office</div>
+                            <div class="quick-link-desc">Student Affairs Building</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

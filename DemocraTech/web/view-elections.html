@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Elections - DemocraTech</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #003366;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logout-btn {
+            background-color: #FFB200;
+            color: #003366;
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .logout-btn:hover {
+            background-color: #e6a000;
+        }
+
+        .nav {
+            background-color: #f8f9fa;
+            padding: 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .nav ul {
+            list-style: none;
+            display: flex;
+            gap: 0;
+        }
+
+        .nav a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: #003366;
+            text-decoration: none;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            background-color: #e9ecef;
+            border-bottom-color: #FFB200;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            color: #003366;
+            font-size: 1.8rem;
+        }
+
+        .filter-controls {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            margin-bottom: 2rem;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .filter-group {
+            flex: 1;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #003366;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            background-color: white;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+        }
+
+        .search-btn {
+            background-color: #003366;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .search-btn:hover {
+            background-color: #002244;
+        }
+        
+        .status-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 1rem;
+        }
+
+        .status-tab {
+            padding: 0.5rem 1rem;
+            background: none;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #6c757d;
+        }
+
+        .status-tab:hover {
+            background-color: #f8f9fa;
+        }
+
+        .status-tab.active {
+            background-color: #003366;
+            color: white;
+            border-color: #003366;
+        }
+
+        .elections-table-container {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            overflow: hidden;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .elections-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .elections-table thead {
+            background-color: #f8f9fa;
+        }
+
+        .elections-table th {
+            padding: 1rem;
+            text-align: left;
+            color: #003366;
+            font-weight: 600;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .elections-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .elections-table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .election-name {
+            color: #003366;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .election-name:hover {
+            text-decoration: underline;
+        }
+
+        .election-description {
+            color: #6c757d;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-upcoming {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-completed {
+            background-color: #e2e3e5;
+            color: #383d41;
+        }
+
+        .action-btn {
+            display: inline-block;
+            padding: 0.375rem 0.75rem;
+            background-color: #003366;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .action-btn:hover {
+            background-color: #002244;
+        }
+
+        .action-btn.view {
+            background-color: #6c757d;
+        }
+
+        .action-btn.view:hover {
+            background-color: #5a6268;
+        }
+
+        .action-btn.results {
+            background-color: #17a2b8;
+        }
+
+        .action-btn.results:hover {
+            background-color: #138496;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #6c757d;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1.5rem;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .pagination-btn {
+            padding: 0.5rem 0.75rem;
+            background-color: white;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #003366;
+        }
+
+        .pagination-btn:hover {
+            background-color: #f8f9fa;
+        }
+
+        .pagination-btn.active {
+            background-color: #003366;
+            color: white;
+            border-color: #003366;
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DemocraTech - View Elections</h1>
+        <div class="user-info">
+            <span>Student: [Student Name]</span>
+            <a href="index.html" class="logout-btn">Logout</a>
+        </div>
+    </div>
+
+    <nav class="nav">
+        <ul>
+            <li><a href="student-dashboard.html">Dashboard</a></li>
+            <li><a href="view-elections.html" class="active">Elections</a></li>
+            <li><a href="voting-page.html">Vote</a></li>
+            <li><a href="vote-history.html">Vote History</a></li>
+            <li><a href="election-results-student.html">Election Result</a></li>
+            <li><a href="apply-candidate.html">Apply As Candidates</a></li>
+            <li><a href="profile.html">Profile</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>All Elections</h1>
+        </div>
+
+        <div class="filter-controls">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label for="facultyFilter">Filter by Faculty</label>
+                    <select id="facultyFilter" class="filter-select">
+                        <option value="">All Faculties</option>
+                        <option value="computing">Faculty of Computer and Mathematical Sciences</option>
+                        <option value="civil-engineering">Faculty of Civil Engineering</option>
+                        <option value="business-management">Faculty of Business and Management</option>
+                        <option value="sports-science">Faculty of Sports Science and Recreation</option>
+                        <option value="law">Faculty of Law</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="positionFilter">Filter by Position Type</label>
+                    <select id="positionFilter" class="filter-select">
+                        <option value="">All Positions</option>
+                        <option value="faculty">Faculty Level</option>
+                        <option value="university">University Level</option>
+                        <option value="committee">Committee</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="yearFilter">Filter by Year</label>
+                    <select id="yearFilter" class="filter-select">
+                        <option value="">All Years</option>
+                        <option value="2024">2025</option>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search elections by name or description...">
+                <button type="button" class="search-btn">Search</button>
+            </div>
+        </div>
+
+        <div class="status-tabs">
+            <button class="status-tab active">All Elections</button>
+            <button class="status-tab">Active</button>
+            <button class="status-tab">Upcoming</button>
+            <button class="status-tab">Completed</button>
+        </div>
+
+        <div class="elections-table-container">
+            <div class="table-responsive">
+                <table class="elections-table">
+                    <thead>
+                        <tr>
+                            <th>Election Name</th>
+                            <th>Status</th>
+                            <th>Faculty</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Positions</th>
+                            <th>Candidates</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="8" class="empty-state">
+                                <div class="empty-state-icon">📊</div>
+                                <h3>No elections available</h3>
+                                <p>Check back later for upcoming elections</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <button class="pagination-btn" disabled>Previous</button>
+                <button class="pagination-btn active">1</button>
+                <button class="pagination-btn" disabled>Next</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Election Results - DemocraTech</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #003366;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logout-btn {
+            background-color: #FFB200;
+            color: #003366;
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .logout-btn:hover {
+            background-color: #e6a000;
+        }
+
+        .nav {
+            background-color: #f8f9fa;
+            padding: 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .nav ul {
+            list-style: none;
+            display: flex;
+            gap: 0;
+        }
+
+        .nav a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: #003366;
+            text-decoration: none;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            background-color: #e9ecef;
+            border-bottom-color: #FFB200;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h2 {
+            color: #003366;
+            font-size: 1.75rem;
+        }
+
+        .export-btn {
+            background-color: #FFB200;
+            color: #003366;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .export-btn:hover {
+            background-color: #e6a000;
+        }
+
+        .election-selector {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            margin-bottom: 2rem;
+        }
+
+        .election-selector label {
+            display: block;
+            color: #003366;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .election-selector select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            text-align: center;
+        }
+
+        .stat-box h3 {
+            color: #6c757d;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-box .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #003366;
+        }
+
+        .stat-box .percentage {
+            color: #28a745;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .position-results {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            margin-bottom: 2rem;
+        }
+
+        .position-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #FFB200;
+        }
+
+        .position-header h3 {
+            color: #003366;
+            font-size: 1.5rem;
+        }
+
+        .total-votes {
+            color: #6c757d;
+            font-weight: 600;
+        }
+
+        .result-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .result-item:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .result-item.winner {
+            border-color: #FFB200;
+            border-width: 2px;
+            background-color: #fff9e6;
+        }
+
+        .rank {
+            width: 50px;
+            height: 50px;
+            background-color: #f8f9fa;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #003366;
+            font-size: 1.25rem;
+            margin-right: 1.5rem;
+        }
+
+        .rank.winner-rank {
+            background-color: #FFB200;
+            color: #003366;
+            font-size: 1.5rem;
+        }
+
+        .candidate-info {
+            flex: 1;
+        }
+
+        .candidate-name {
+            font-weight: 600;
+            color: #003366;
+            font-size: 1.125rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .candidate-details {
+            color: #6c757d;
+            font-size: 0.9375rem;
+        }
+
+        .vote-stats {
+            text-align: right;
+            min-width: 150px;
+        }
+
+        .vote-count {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #003366;
+            margin-bottom: 0.25rem;
+        }
+
+        .vote-percentage {
+            color: #6c757d;
+            font-size: 0.875rem;
+        }
+
+        .vote-bar {
+            margin-top: 0.75rem;
+            height: 8px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .vote-bar-fill {
+            height: 100%;
+            background-color: #003366;
+            transition: width 0.5s ease;
+        }
+
+        .vote-bar-fill.winner-bar {
+            background-color: #FFB200;
+        }
+
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        .chart-container h3 {
+            color: #003366;
+            margin-bottom: 1.5rem;
+        }
+
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .bar-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .bar-label {
+            min-width: 120px;
+            font-weight: 600;
+            color: #003366;
+            font-size: 0.875rem;
+        }
+
+        .bar {
+            flex: 1;
+            height: 30px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background-color: #003366;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.5rem;
+            color: white;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .bar-fill.top {
+            background-color: #FFB200;
+            color: #003366;
+        }
+
+        .pie-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .pie-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .pie-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        .pie-label {
+            flex: 1;
+            font-weight: 600;
+            color: #003366;
+        }
+
+        .pie-value {
+            font-weight: 600;
+            color: #6c757d;
+        }
+
+        .winner-badge {
+            display: inline-block;
+            background-color: #FFB200;
+            color: #003366;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            margin-left: 1rem;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 3rem;
+            color: #6c757d;
+        }
+
+        .no-data h3 {
+            color: #003366;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DemocraTech - Admin Panel</h1>
+        <div class="user-info">
+            <span>Admin: [Admin Name]</span>
+            <a href="index.html" class="logout-btn">Logout</a>
+        </div>
+    </div>
+
+    <nav class="nav">
+        <ul>
+            <li><a href="admin-dashboard.html">Dashboard</a></li>
+            <li><a href="manage-elections.html">Elections</a></li>
+            <li><a href="manage-users.html">Users</a></li>
+            <li><a href="manage-candidates.html">Candidates</a></li>
+            <li><a href="election-results.html" class="active">Results</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h2>Election Results</h2>
+            <button class="export-btn">Export Results (PDF)</button>
+        </div>
+
+        <div class="election-selector">
+            <label for="election">Select Election</label>
+            <select id="election" name="election">
+                <option value="">No elections available</option>
+            </select>
+        </div>
+
+        <div class="summary-stats">
+            <div class="stat-box">
+                <h3>Total Votes Cast</h3>
+                <div class="number">0</div>
+            </div>
+            <div class="stat-box">
+                <h3>Eligible Voters</h3>
+                <div class="number">0</div>
+            </div>
+            <div class="stat-box">
+                <h3>Voter Turnout</h3>
+                <div class="number">0%</div>
+                <div class="percentage">No data</div>
+            </div>
+            <div class="stat-box">
+                <h3>Total Positions</h3>
+                <div class="number">0</div>
+            </div>
+        </div>
+
+        <div class="no-data">
+            <h3>No Election Results Available</h3>
+            <p>Please select a completed election to view results.</p>
+        </div>
+    </div>
+</body>
+</html>

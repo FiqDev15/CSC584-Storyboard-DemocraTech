@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Candidates - DemocraTech</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #003366;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logout-btn {
+            background-color: #FFB200;
+            color: #003366;
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .logout-btn:hover {
+            background-color: #e6a000;
+        }
+
+        .nav {
+            background-color: #f8f9fa;
+            padding: 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .nav ul {
+            list-style: none;
+            display: flex;
+            gap: 0;
+        }
+
+        .nav a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: #003366;
+            text-decoration: none;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            background-color: #e9ecef;
+            border-bottom-color: #FFB200;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h2 {
+            color: #003366;
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #6c757d;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            color: #003366;
+        }
+
+        .tab.active {
+            color: #003366;
+            border-bottom-color: #FFB200;
+        }
+
+        .tab .count {
+            background-color: #FFB200;
+            color: #003366;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            margin-left: 0.5rem;
+        }
+
+        .filters {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .filter-group {
+            flex: 1;
+        }
+
+        .filter-group label {
+            display: block;
+            color: #003366;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .filter-group select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+
+        .candidates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .candidate-card {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .candidate-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h3 {
+            color: #003366;
+            font-size: 1.125rem;
+            margin: 0;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .badge-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-approved {
+            background-color: #d1e7dd;
+            color: #0a3622;
+        }
+
+        .badge-rejected {
+            background-color: #f8d7da;
+            color: #58151c;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .candidate-info {
+            margin-bottom: 1rem;
+        }
+
+        .info-row {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: #6c757d;
+            font-size: 0.9375rem;
+        }
+
+        .info-row strong {
+            color: #003366;
+            min-width: 100px;
+        }
+
+        .manifesto {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .manifesto h4 {
+            color: #003366;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .manifesto p {
+            color: #6c757d;
+            font-size: 0.9375rem;
+            line-height: 1.6;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-approve {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-approve:hover {
+            background-color: #218838;
+        }
+
+        .btn-reject {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-reject:hover {
+            background-color: #c82333;
+        }
+
+        .btn-view {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .btn-view:hover {
+            background-color: #138496;
+        }
+
+        .btn-details {
+            background-color: #FFB200;
+            color: #003366;
+        }
+
+        .btn-details:hover {
+            background-color: #e6a000;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #6c757d;
+        }
+
+        .empty-state h3 {
+            color: #003366;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            max-width: 500px;
+            width: 90%;
+            z-index: 1001;
+        }
+
+        .modal h3 {
+            color: #003366;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #003366;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DemocraTech - Admin Panel</h1>
+        <div class="user-info">
+            <span>Admin: [Admin Name]</span>
+            <a href="index.html" class="logout-btn">Logout</a>
+        </div>
+    </div>
+
+    <nav class="nav">
+        <ul>
+            <li><a href="admin-dashboard.html">Dashboard</a></li>
+            <li><a href="manage-elections.html">Elections</a></li>
+            <li><a href="manage-users.html">Users</a></li>
+            <li><a href="manage-candidates.html" class="active">Candidates</a></li>
+            <li><a href="election-results.html">Results</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h2>Manage Candidates</h2>
+            <p>Review and approve candidate applications for elections</p>
+        </div>
+
+
+        <div class="tabs">
+            <button class="tab active">Pending Approval <span class="count">0</span></button>
+            <button class="tab">Approved <span class="count">0</span></button>
+            <button class="tab">Rejected <span class="count">0</span></button>
+        </div>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label>Election</label>
+                <select>
+                    <option value="">All Elections</option>
+                    <option value="1">MPP Election 2025</option>
+                    <option value="2">Faculty Representative 2025</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Position</label>
+                <select>
+                    <option value="">All Positions</option>
+                    <option value="president">President</option>
+                    <option value="vp">Vice President</option>
+                    <option value="secretary">Secretary</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Faculty</label>
+                <select>
+                    <option value="">All Faculties</option>
+                    <option value="engineering">Engineering</option>
+                    <option value="business">Business</option>
+                    <option value="science">Science</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="empty-state">
+            <h3>No Candidates Found</h3>
+            <p>There are no candidates pending approval at this time.</p>
+        </div>
+
+        <div class="modal-overlay">
+            <div class="modal">
+                <h3>Reject Candidate</h3>
+                <form>
+                    <div class="form-group">
+                        <label for="reject_reason">Reason for Rejection *</label>
+                        <textarea id="reject_reason" name="reject_reason" placeholder="Enter reason for rejection..." required></textarea>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="submit" class="btn btn-reject">Confirm Rejection</button>
+                        <button type="button" class="btn btn-secondary">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

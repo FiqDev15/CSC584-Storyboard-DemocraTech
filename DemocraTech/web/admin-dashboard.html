@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - DemocraTech</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #003366;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logout-btn {
+            background-color: #FFB200;
+            color: #003366;
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .logout-btn:hover {
+            background-color: #e6a000;
+        }
+
+        .nav {
+            background-color: #f8f9fa;
+            padding: 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .nav ul {
+            list-style: none;
+            display: flex;
+            gap: 0;
+        }
+
+        .nav a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: #003366;
+            text-decoration: none;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            background-color: #e9ecef;
+            border-bottom-color: #FFB200;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .stat-card h3 {
+            color: #6c757d;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #003366;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .label {
+            color: #6c757d;
+            font-size: 0.875rem;
+        }
+
+        .stat-card.primary {
+            border-left: 4px solid #003366;
+        }
+
+        .stat-card.warning {
+            border-left: 4px solid #FFB200;
+        }
+
+        .stat-card.success {
+            border-left: 4px solid #28a745;
+        }
+
+        .stat-card.info {
+            border-left: 4px solid #17a2b8;
+        }
+
+        .quick-actions {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            margin-bottom: 2rem;
+        }
+
+        .quick-actions h2 {
+            color: #003366;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .action-btn {
+            display: block;
+            padding: 1rem;
+            background-color: #003366;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .action-btn:hover {
+            background-color: #002244;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .alerts {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            margin-bottom: 2rem;
+        }
+
+        .alerts h2 {
+            color: #003366;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .alert-item {
+            padding: 1rem;
+            background-color: #fff3cd;
+            border-left: 4px solid #FFB200;
+            margin-bottom: 0.75rem;
+            border-radius: 4px;
+        }
+
+        .alert-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .alert-item strong {
+            color: #003366;
+        }
+
+        .recent-activity {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        .recent-activity h2 {
+            color: #003366;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .activity-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-time {
+            color: #6c757d;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DemocraTech - Admin Panel</h1>
+        <div class="user-info">
+            <span>Admin: [Admin Name]</span>
+            <a href="index.html" class="logout-btn">Logout</a>
+        </div>
+    </div>
+
+    <nav class="nav">
+        <ul>
+            <li><a href="admin-dashboard.html" class="active">Dashboard</a></li>
+            <li><a href="manage-elections.html">Elections</a></li>
+            <li><a href="manage-users.html">Users</a></li>
+            <li><a href="manage-candidates.html">Candidates</a></li>
+            <li><a href="election-results.html">Results</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card primary">
+                <h3>Total Elections</h3>
+                <div class="number">0</div>
+                <div class="label">No elections yet</div>
+            </div>
+
+            <div class="stat-card warning">
+                <h3>Pending Approvals</h3>
+                <div class="number">0</div>
+                <div class="label">Candidates awaiting approval</div>
+            </div>
+
+            <div class="stat-card success">
+                <h3>Total Votes Cast</h3>
+                <div class="number">0</div>
+                <div class="label">Across all elections</div>
+            </div>
+
+            <div class="stat-card info">
+                <h3>Registered Users</h3>
+                <div class="number">0</div>
+                <div class="label">Students & Admins</div>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+            <h2>Quick Actions</h2>
+            <div class="actions-grid">
+                <a href="manage-elections.html" class="action-btn">Create New Election</a>
+                <a href="manage-users.html" class="action-btn">Add New User</a>
+                <a href="manage-candidates.html" class="action-btn">Review Candidates</a>
+                <a href="election-results.html" class="action-btn">View Results</a>
+            </div>
+        </div>
+
+        <div class="alerts">
+            <h2>⚠️ Pending Actions</h2>
+            <div class="alert-item">
+                No pending actions
+            </div>
+        </div>
+
+        <div class="recent-activity">
+            <h2>Recent Activity</h2>
+            <div class="activity-item">
+                No recent activity
+            </div>
+        </div>
+    </div>
+</body>
+</html>

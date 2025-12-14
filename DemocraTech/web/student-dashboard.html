@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - DemocraTech</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #003366;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logout-btn {
+            background-color: #FFB200;
+            color: #003366;
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .logout-btn:hover {
+            background-color: #e6a000;
+        }
+
+        .nav {
+            background-color: #f8f9fa;
+            padding: 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .nav ul {
+            list-style: none;
+            display: flex;
+            gap: 0;
+        }
+
+        .nav a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: #003366;
+            text-decoration: none;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            background-color: #e9ecef;
+            border-bottom-color: #FFB200;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .welcome-banner {
+            background: linear-gradient(135deg, #003366 0%, #004080 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .welcome-banner h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-banner p {
+            opacity: 0.9;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .stat-card h3 {
+            color: #6c757d;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #003366;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .label {
+            color: #6c757d;
+            font-size: 0.875rem;
+        }
+
+        .stat-card.primary {
+            border-left: 4px solid #003366;
+        }
+
+        .stat-card.warning {
+            border-left: 4px solid #FFB200;
+        }
+
+        .stat-card.success {
+            border-left: 4px solid #28a745;
+        }
+
+        .stat-card.info {
+            border-left: 4px solid #17a2b8;
+        }
+
+        .elections-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            color: #003366;
+            font-size: 1.25rem;
+        }
+
+        .view-all {
+            color: #003366;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .view-all:hover {
+            text-decoration: underline;
+        }
+
+        .elections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .election-card {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .election-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .election-card.active {
+            border-left: 4px solid #28a745;
+        }
+
+        .election-card.upcoming {
+            border-left: 4px solid #FFB200;
+        }
+
+        .election-card.completed {
+            border-left: 4px solid #6c757d;
+        }
+
+        .election-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #003366;
+            margin-bottom: 0.5rem;
+        }
+
+        .election-details {
+            color: #6c757d;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .election-details span {
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .status-active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-upcoming {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-completed {
+            background-color: #e2e3e5;
+            color: #383d41;
+        }
+
+        .vote-btn {
+            display: block;
+            width: 100%;
+            background-color: #003366;
+            color: white;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .vote-btn:hover {
+            background-color: #002244;
+        }
+
+        .vote-btn.completed {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .vote-btn.completed:hover {
+            background-color: #6c757d;
+        }
+
+        .recent-activity {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        .recent-activity h2 {
+            color: #003366;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .activity-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-time {
+            color: #6c757d;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DemocraTech - Student Dashboard</h1>
+        <div class="user-info">
+            <span>Student: [Student Name]</span>
+            <a href="index.html" class="logout-btn">Logout</a>
+        </div>
+    </div>
+
+    <nav class="nav">
+        <ul>
+            <li><a href="student-dashboard.html" class="active">Dashboard</a></li>
+            <li><a href="view-elections.html">Elections</a></li>
+            <li><a href="voting-page.html">Vote</a></li>
+            <li><a href="vote-history.html">Vote History</a></li>
+            <li><a href="election-results-student.html">Election Result</a></li>
+            <li><a href="apply-candidate.html">Apply As Candidates</a></li>
+            <li><a href="profile.html">Profile</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="welcome-banner">
+            <h2>Welcome back, [Student Name]!</h2>
+            <p>Participate in ongoing elections and make your voice heard</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card primary">
+                <h3>Active Elections</h3>
+                <div class="number">0</div>
+                <div class="label">Elections you can vote in now</div>
+            </div>
+
+            <div class="stat-card warning">
+                <h3>Upcoming Elections</h3>
+                <div class="number">0</div>
+                <div class="label">Starting soon</div>
+            </div>
+
+            <div class="stat-card success">
+                <h3>Votes Cast</h3>
+                <div class="number">0</div>
+                <div class="label">Total votes participated</div>
+            </div>
+
+            <div class="stat-card info">
+                <h3>Faculty</h3>
+                <div class="number">[Faculty Name]</div>
+                <div class="label">Your current faculty</div>
+            </div>
+        </div>
+
+        <div class="elections-section">
+            <div class="section-header">
+                <h2>Active Elections - Vote Now!</h2>
+                <a href="view-elections.html" class="view-all">View All Elections →</a>
+            </div>
+
+            <div class="elections-grid">
+                <div class="empty-state-card" style="text-align: center; padding: 3rem; grid-column: 1 / -1;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
+                    <h3 style="color: #003366; margin-bottom: 0.5rem;">No Active Elections</h3>
+                    <p style="color: #6c757d;">There are currently no elections available for voting</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="recent-activity">
+            <h2>Recent Activity</h2>
+            <div class="empty-state-activity" style="text-align: center; padding: 2rem;">
+                <div style="color: #6c757d;">No recent activity to display</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

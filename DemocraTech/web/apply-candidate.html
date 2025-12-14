@@ -1,0 +1,402 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply as Candidate - DemocraTech</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #003366;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logout-btn {
+            background-color: #FFB200;
+            color: #003366;
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav {
+            background-color: #f8f9fa;
+            padding: 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .nav ul {
+            list-style: none;
+            display: flex;
+            gap: 0;
+        }
+
+        .nav a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: #003366;
+            text-decoration: none;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            background-color: #e9ecef;
+            border-bottom-color: #FFB200;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .application-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .application-header {
+            background: linear-gradient(135deg, #003366 0%, #004080 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .application-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .application-header p {
+            opacity: 0.9;
+        }
+
+        .application-form {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #003366;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #003366;
+            box-shadow: 0 0 0 2px rgba(0,51,102,0.1);
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1em;
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-group input {
+            width: auto;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #003366;
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            background-color: #002244;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            flex: 1;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .form-help {
+            color: #6c757d;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .required::after {
+            content: " *";
+            color: #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .application-form {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DemocraTech - Candidate Application</h1>
+        <div class="user-info">
+            <span>Student: [Student Name]</span>
+            <a href="index.html" class="logout-btn">Logout</a>
+        </div>
+    </div>
+
+    <nav class="nav">
+        <ul>
+            <li><a href="student-dashboard.html">Dashboard</a></li>
+            <li><a href="view-elections.html">Elections</a></li>
+            <li><a href="voting-page.html">Vote</a></li>
+            <li><a href="vote-history.html">Vote History</a></li>
+            <li><a href="election-results-student.html">Election Result</a></li>
+            <li><a href="apply-candidate.html" class="active">Apply As Candidates</a></li>
+            <li><a href="profile.html">Profile</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="application-card">
+            <div class="application-header">
+                <h2>Apply as Candidate</h2>
+                <p>Submit your application to run in student elections</p>
+            </div>
+
+            <form class="application-form" id="candidateApplication">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="studentName" class="required">Full Name</label>
+                        <input type="text" id="studentName" class="form-control" value="[Student Name]" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="studentId" class="required">Student ID</label>
+                        <input type="text" id="studentId" class="form-control" value="[STU123456]" readonly>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="faculty" class="required">Faculty</label>
+                        <select id="faculty" class="form-control" required>
+                            <option value="">Select Faculty</option>
+                            <option value="computer_math">Faculty of Computer and Mathematical Sciences</option>
+                            <option value="civil_eng">Faculty of Civil Engineering</option>
+                            <option value="business">Faculty of Business and Management</option>
+                            <option value="sports">Faculty of Sports Science and Recreation</option>
+                            <option value="law">Faculty of Law</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="year" class="required">Year of Study</label>
+                        <select id="year" class="form-control" required>
+                            <option value="">Select Year</option>
+                            <option value="1">First Year</option>
+                            <option value="2">Second Year</option>
+                            <option value="3">Third Year</option>
+                            <option value="4">Fourth Year</option>
+                            <option value="5">Fifth Year</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="election" class="required">Select Election</label>
+                    <select id="election" class="form-control" required>
+                        <option value="">Choose an election to run in</option>
+                        <option value="1">Student Union President 2024</option>
+                        <option value="2">Faculty Representative - Computer Science</option>
+                        <option value="3">Sports Committee Chairperson</option>
+                        <option value="4">Cultural Secretary</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="position" class="required">Position Applying For</label>
+                    <input type="text" id="position" class="form-control" placeholder="e.g., President, Secretary, Representative" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="manifesto" class="required">Manifesto / Campaign Statement</label>
+                    <textarea id="manifesto" class="form-control" placeholder="Describe your vision, goals, and why students should vote for you..." required></textarea>
+                    <div class="form-help">Minimum 200 characters. Be clear about your objectives.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="experience">Previous Experience (Optional)</label>
+                    <textarea id="experience" class="form-control" placeholder="Any leadership roles, committee experience, or relevant activities..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="campaignPlan">Campaign Plan (Optional)</label>
+                    <textarea id="campaignPlan" class="form-control" placeholder="How do you plan to campaign? What strategies will you use?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="required">Declaration</label>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="declaration1" required>
+                        <label for="declaration1">I confirm that all information provided is accurate and truthful</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="declaration2" required>
+                        <label for="declaration2">I agree to abide by the election rules and code of conduct</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="declaration3" required>
+                        <label for="declaration3">I understand that false information may lead to disqualification</label>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='student-dashboard.html'">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Submit Application</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('candidateApplication').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                election: document.getElementById('election').value,
+                position: document.getElementById('position').value,
+                manifesto: document.getElementById('manifesto').value,
+                year: document.getElementById('year').value
+            };
+            
+            if (formData.manifesto.length < 200) {
+                alert('Manifesto must be at least 200 characters long.');
+                return;
+            }
+            
+            alert('Application submitted successfully! Your application will be reviewed by the election committee.');
+            
+            setTimeout(() => {
+                window.location.href = 'student-dashboard.html';
+            }, 1500);
+        });
+        
+        document.getElementById('election').addEventListener('change', function() {
+            const election = this.value;
+            const positionField = document.getElementById('position');
+            
+            const positionMap = {
+                '1': 'Student Union President',
+                '2': 'Faculty Representative',
+                '3': 'Sports Committee Chairperson',
+                '4': 'Cultural Secretary'
+            };
+            
+            if (positionMap[election]) {
+                positionField.value = positionMap[election];
+            } else {
+                positionField.value = '';
+            }
+        });
+    </script>
+</body>
+</html>
