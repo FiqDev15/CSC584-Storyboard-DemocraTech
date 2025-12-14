@@ -1,6 +1,6 @@
-DemocraTechSystem Storyboard
+## DemocraTech System Storyboard
 
-## Entry Points
+### Entry Points
 ```
 index.html → Landing page
     ↓
@@ -10,7 +10,7 @@ register.html → New user registration
 
 ---
 
-## Admin Flow
+##  Admin Flow
 
 **Dashboard**
 - [admin-dashboard.html](web/admin-dashboard.html) - Main admin control panel
@@ -30,7 +30,7 @@ register.html → New user registration
 **Dashboard**
 - [student-dashboard.html](web/student-dashboard.html) - Main student portal
 
-**Voting Process
+**Voting Process**
 1. [view-elections.html](web/view-elections.html) - Browse active elections
 2. [voting-page.html](web/voting-page.html) - Cast votes
 3. [vote-history.html](web/vote-history.html) - View voting history
@@ -43,7 +43,7 @@ register.html → New user registration
 
 ---
 
-## 🔧 Common Pages
+## Common Pages
 
 - [profile.html](web/profile.html) - User profile management
 - [help.html](web/help.html) - Help and support documentation
@@ -78,6 +78,10 @@ web/
     └── help.html
 ```
 
+---
+
+## User Journey
+
 ### Admin Journey
 1. Login → Admin Dashboard
 2. Manage Elections (Create/Edit/Delete)
@@ -92,6 +96,8 @@ web/
 4. Cast Vote
 5. View Vote History
 6. Check Election Results
+
+---
 
 ## Getting Started
 
